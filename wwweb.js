@@ -13,8 +13,39 @@ const rl = readline.createInterface({
 
 // Classes
 
+class RuleSet {
+  constructor(userAgent, rules) {
+    this.userAgent = userAgent
+    this.rules = rules
+  }
+}
+
+class DomainSettings {
+  constructor(domain, rulesets) {
+    this.domain = domain
+    this.rulesets = rulesets
+  }
+  
+  addRuleset(ruleset) {
+    this.rulesets.push(ruleset)
+  }
+}
+
+class Record {
+  constructor(timestamp, domainSettings) {
+    this.timestamp
+    this.domainSettings = domainSettings
+  }
+}
+
 class Protocol {
-  constructor() {}
+  constructor() {
+    this.records = []
+  }
+  
+  addRecord(record) {
+    this.records.push(record)
+  }
 }
 
 class Report {
