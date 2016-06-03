@@ -139,7 +139,7 @@ const WWWEB = (() => {
       // rest
       setTimeout(function () {
         performRoutine(self.domainStack.pop())
-      }, self.restTime)
+      }, self.restTime * 1000)
       
       if (argv.verbose && self.restTime > 0) {
         console.log(`resting for ${self.restTime}s...`)
