@@ -62,11 +62,48 @@ class Report {
 
 const WWWEB = (() => {
   const self = {
-    report: null
+    initialAddress: null,
+    restTime: 0, // seconds
+    report: null,
+    domainStack: [],
+    processedDomains: []
   }
   
   self.init = initialAddress => {
+    self.initialAddress = initialAddress
     self.report = new Report(initialAddress)
+  }
+  
+  const processDomain = domain => {
+    // Request robots.txt
+    
+    // Interpret robots.txt
+    
+    // Fulfill DomainSettings Promise
+    
+  }
+  
+  const performRoutine = domain => {
+    let timestamp = Date.now()
+    
+    processDomain(domain).then(domainSettings => {
+      let newRecord = new Record(timestamp, domainSettings)
+      self.report.protocol.addRecord(newRecord)
+      
+      self.processedDomains.push(domain)
+      
+      if (self.domainStack.length > 0) {
+        setTimeout(function () {
+          performRoutine(self.domainStack.pop())
+        }, self.restTime)
+      }
+    })
+  }
+  
+  self.run = restTime => {
+    self.restTime = (typeof restTime === 'number') ? restTime : 0
+    
+    performRoutine(self.initialAddress)
   }
   
   return self
