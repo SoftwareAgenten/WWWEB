@@ -11,15 +11,23 @@ const colors = require('colors')
 
 const argv = yargs
   .usage('usage: $0 -d domain [--rest=0]')
+  // --domain
   .demand('d')
   .alias('d', 'domain')
   .nargs('d', 1)
   .describe('d', 'Initial domain')
+  // --rest
   .default('rest', 0)
   .alias('rest', 'r')
   .describe('r', 'Seconds to rest between requests')
+  // --verbose
+  .default('verbose', false)
+  .alias('verbose', 'v')
+  .describe('v', 'Verbose output of what is going on')
+  // --help
   .help('help')
   .alias('help', 'h')
+  // examples
   .example('$0 -d example.org --rest=1', 'start crawling at example.org with 1 second rest between requests')
   .argv
 
@@ -115,6 +123,10 @@ const WWWEB = (() => {
       setTimeout(function () {
         performRoutine(self.domainStack.pop())
       }, self.restTime)
+      
+      if (argv.verbose && self.restTime > 0) {
+        console.log(`resting for ${self.restTime}s...`)
+      }
     } else {
       // terminate
       console.log('no next domain to process')
