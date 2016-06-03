@@ -1,0 +1,16 @@
+{
+  "name": "wwweb",
+  "version": "0.1.0",
+  "description": "A node.js based autonomous analyzer for robots.txt files.",
+  "main": "wwweb.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SoftwareAgenten/WWWEB.git"
+  },
+  "author": "Florian Pircher <git@leuchtschirm.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoftwareAgenten/WWWEB/issues"
+  },
+  "homepage": "https://github.com/SoftwareAgenten/WWWEB#readme"
+}
