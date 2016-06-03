@@ -3,16 +3,23 @@
 
 // Node Modules
 
-const readline = require('readline')
 const yargs = require('yargs')
 
 // Modules Setup
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-const argv = yargs.argv
+const argv = yargs
+  .usage('usage: $0 -d domain [--rest=0]')
+  .demand('d')
+  .alias('d', 'domain')
+  .nargs('d', 1)
+  .describe('d', 'Initial domain')
+  .default('rest', 0)
+  .alias('rest', 'r')
+  .describe('r', 'Seconds to rest between requests')
+  .help('help')
+  .alias('help', 'h')
+  .example('$0 -d example.org --rest=1', 'start crawling at example.org with 1 second rest between requests')
+  .argv
 
 // Classes
 
@@ -111,7 +118,5 @@ const WWWEB = (() => {
 
 // Startup Logic
 
-rl.question('Initial domain: ', answer => {
-  WWWEB.init(answer)
-  rl.close()
-})
+WWWEB.init(argv.domain)
+WWWEB.run(argv.rest)
