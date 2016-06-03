@@ -75,6 +75,10 @@ class Report {
   }
 }
 
+// Constants
+
+const HTML_LINK_REGEX = new RegExp(String.raw`<\s*a.*?href\s*=\s*["']\s*https?:\/\/.*?((?:[\w\d-]+\.)+[\w\d-]+).*?["'][^>]*>.*?<\s*?\/\s*?a\s*?>`, 'ig')
+
 // Main Routine
 
 const WWWEB = (() => {
@@ -93,12 +97,25 @@ const WWWEB = (() => {
   }
   
   const processDomain = domain => {
-    console.log(`* processing ${domain}...`)
+    console.log(`* processing ${domain.blue}...`)
     
     return new Promise((resolve, reject) => {
       axios.get(`http://${domain}/`).then(response => {
         console.log('├ '+'found startpage'.green)
-        // TODO: search for domains
+        
+        const HTML = response.data
+        let newDomains = []
+        let match = null
+        
+        while (match = HTML_LINK_REGEX.exec(HTML)) {
+          newDomains.push(match[1])
+        }
+        
+        newDomains
+          .filter((x, index) => newDomains.indexOf(x) === index) // unique
+          .filter(x => x !== domain)
+          .filter(x => self.processedDomains.indexOf(x) === -1)
+          .forEach(x => self.domainStack.push(x))
       }, error => {
         console.log('├ '+'no startpage'.red)
         // TODO: handle no new domains
