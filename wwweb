@@ -88,18 +88,23 @@ const WWWEB = (() => {
     console.log(`* processing ${domain}...`)
     
     return new Promise((resolve, reject) => {
-      axios.get(`http://${domain}/robots.txt`).then(response => {
-        console.log('├ '+'found robots.txt'.green)
-        // TODO: interpret robots.txt
-      }, error => {
-        console.log('├ '+'no robots.txt'.red)
-        // TODO: handle no robots.txt
-      }).then(axios.get(`http://${domain}/`)).then(response => {
-        console.log('└ '+'found startpage'.green)
+      axios.get(`http://${domain}/`).then(response => {
+        console.log('├ '+'found startpage'.green)
         // TODO: search for domains
       }, error => {
-        console.log('└ '+'no startpage'.red)
+        console.log('├ '+'no startpage'.red)
         // TODO: handle no new domains
+      }).then(() => {
+        axios.get(`http://${domain}/robots.txt`).then(response => {
+          console.log('└ '+'found robots.txt'.green)
+          // TODO: interpret robots.txt
+          let domainSettings = null
+          resolve(domainSettings)
+        }, error => {
+          console.log('└ '+'no robots.txt'.red)
+          // TODO: handle no robots.txt
+          reject()
+        })
       })
     })
   }
