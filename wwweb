@@ -4,6 +4,8 @@
 // Node Modules
 
 const yargs = require('yargs')
+const axios = require('axios')
+const colors = require('colors')
 
 // Modules Setup
 
@@ -76,18 +78,42 @@ const WWWEB = (() => {
     processedDomains: []
   }
   
-  self.init = initialAddress => {
+  self.init = (initialAddress, restTime) => {
     self.initialAddress = initialAddress
+    self.restTime = restTime
     self.report = new Report(initialAddress)
   }
   
   const processDomain = domain => {
-    // Request robots.txt
+    console.log(`* processing ${domain}...`)
     
-    // Interpret robots.txt
-    
-    // Fulfill DomainSettings Promise
-    
+    return new Promise((resolve, reject) => {
+      axios.get(`http://${domain}/robots.txt`).then(response => {
+        console.log('├ '+'found robots.txt'.green)
+        // TODO: interpret robots.txt
+      }, error => {
+        console.log('├ '+'no robots.txt'.red)
+        // TODO: handle no robots.txt
+      }).then(axios.get(`http://${domain}/`)).then(response => {
+        console.log('└ '+'found startpage'.green)
+        // TODO: search for domains
+      }, error => {
+        console.log('└ '+'no startpage'.red)
+        // TODO: handle no new domains
+      })
+    })
+  }
+  
+  const crawl = () => {
+    if (self.domainStack.length > 0) {
+      // rest
+      setTimeout(function () {
+        performRoutine(self.domainStack.pop())
+      }, self.restTime)
+    } else {
+      // terminate
+      console.log('no next domain to process')
+    }
   }
   
   const performRoutine = domain => {
@@ -95,21 +121,16 @@ const WWWEB = (() => {
     
     processDomain(domain).then(domainSettings => {
       let newRecord = new Record(timestamp, domainSettings)
-      self.report.protocol.addRecord(newRecord)
       
+      // store new record and remember domain
+      self.report.protocol.addRecord(newRecord)
       self.processedDomains.push(domain)
       
-      if (self.domainStack.length > 0) {
-        setTimeout(function () {
-          performRoutine(self.domainStack.pop())
-        }, self.restTime)
-      }
-    })
+      crawl()
+    }).catch(crawl)
   }
   
-  self.run = restTime => {
-    self.restTime = (typeof restTime === 'number') ? restTime : 0
-    
+  self.run = () => {
     performRoutine(self.initialAddress)
   }
   
@@ -118,5 +139,5 @@ const WWWEB = (() => {
 
 // Startup Logic
 
-WWWEB.init(argv.domain)
-WWWEB.run(argv.rest)
+WWWEB.init(argv.domain, argv.rest)
+WWWEB.run()
