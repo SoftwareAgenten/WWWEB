@@ -10,7 +10,7 @@ const colors = require('colors')
 // Modules Setup
 
 const argv = yargs
-  .usage('usage: $0 -d domain [--rest=0]')
+  .usage('usage: $0 -d <domain> [--rest <seconds>] [-v]')
   // --domain
   .demand('d')
   .alias('d', 'domain')
@@ -21,7 +21,7 @@ const argv = yargs
   .alias('rest', 'r')
   .describe('r', 'Seconds to rest between requests')
   // --verbose
-  .default('verbose', false)
+  .boolean('verbose')
   .alias('verbose', 'v')
   .describe('v', 'Verbose output of what is going on')
   // --help
