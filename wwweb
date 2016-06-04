@@ -127,7 +127,7 @@ const WWWEB = (() => {
     restTime: 0, // seconds
     report: null,
     domainStack: [],
-    processedDomains: []
+    previousDomains: []
   }
   
   self.init = (initialAddress, restTime = 0) => {
@@ -156,7 +156,7 @@ const WWWEB = (() => {
         newDomains
           .filter((x, index) => newDomains.indexOf(x) === index) // unique only
           .filter(x => x !== domain) // filter out current domain
-          .filter(x => self.processedDomains.indexOf(x) === -1) // keep unknown
+          .filter(x => self.previousDomains.indexOf(x) === -1) // keep unknown
           .forEach(x => self.domainStack.push(x)) // add new domains to stack
         
         debug(`added ${newDomains.length} new domains to the stack`)
@@ -229,7 +229,9 @@ const WWWEB = (() => {
   
   const crawl = () => {
     self.domainStack = self.domainStack
-      .filter(x => self.processedDomains.indexOf(x) === -1)
+      .filter(x => self.previousDomains.indexOf(x) === -1)
+      .filter(x => self.previousDomains.indexOf(x.replace(/^www\./, '')) === -1)
+      .filter(x => self.previousDomains.indexOf(`www.${x}`) === -1)
     
     debug(`domainstack height: ${self.domainStack.length}`)
     
@@ -256,12 +258,12 @@ const WWWEB = (() => {
       
       // store new record
       self.report.protocol.addRecord(newRecord)
-      self.processedDomains.push(domain)
+      self.previousDomains.push(domain)
       
       crawl()
     }).catch(() => {
       // store domain regardless
-      self.processedDomains.push(domain)
+      self.previousDomains.push(domain)
       crawl()
     })
   }
