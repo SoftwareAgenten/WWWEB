@@ -1,5 +1,7 @@
 # WWWEB
 
+![](https://software-agenten.addpixel.net/static/wwweb.svg)
+
 An autonomous webcrawler for indexing robots.txt files.
 
 ## Requirements
