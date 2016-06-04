@@ -34,7 +34,7 @@ const argv = yargs
 // Classes
 
 class RuleSet {
-  constructor(userAgent, rules = false) {
+  constructor(userAgent, rules = []) {
     this.userAgent = userAgent
     this.rules = rules
   }
@@ -45,7 +45,7 @@ class RuleSet {
 }
 
 class DomainSettings {
-  constructor(domain, rulesets) {
+  constructor(domain, rulesets = []) {
     this.domain = domain
     this.rulesets = rulesets
   }
@@ -81,7 +81,9 @@ class Report {
 
 // Constants
 
-const HTML_LINK_REGEX = new RegExp(String.raw`<\s*a.*?href\s*=\s*["']\s*https?:\/\/.*?((?:[\w\d-]+\.)+[\w\d-]+).*?["'][^>]*>.*?<\s*?\/\s*?a\s*?>`, 'ig')
+const HTML_LINK_REGEX = /<\s*a.*?href\s*=\s*["']\s*https?:\/\/.*?((?:[\w\d-]+\.)+[\w\d-]+).*?["'][^>]*>.*?<\s*?\/\s*?a\s*?>/ig
+const GRAP_UA_REGEX = /User-agent:\s*(.*)/i
+const GRAP_RULE_REGEX = /Disallow:\s*(.*)/i
 
 // Main Routine
 
@@ -124,9 +126,40 @@ const WWWEB = (() => {
         console.log('├ '+'no startpage'.red)
       }).then(() => {
         axios.get(`http://${domain}/robots.txt`).then(response => {
+          // Check Content-Type
+          if (!/text\/plain/i.test(response.headers['content-type'])) {
+            console.log('└ '+'invalide robots.txt'.red)
+            reject()
+            return
+          }
+          
           console.log('└ '+'found robots.txt'.green)
-          // TODO: interpret robots.txt
-          let domainSettings = null
+          
+          let domainSettings = new DomainSettings(domain)
+          const lines = response.data.split('\n')
+          let currentRuleset = null
+          
+          // Parse robots.txt, Line by Line
+          lines.forEach(line => {
+            if (/^User-agent:/.test(line)) {
+              const UA = GRAP_UA_REGEX.exec(line)[1]
+                            
+              if (currentRuleset !== null) {
+                // Save old Ruleset
+                domainSettings.addRuleset(currentRuleset)
+              }
+              currentRuleset = new RuleSet(UA)
+            }
+            
+            else if (/^Disallow:/.test(line)) {
+              const rule = GRAP_RULE_REGEX.exec(line)[1]
+              currentRuleset.addRule(rule)
+            }
+          })
+          
+          // Add last Ruleset to DomainSettings
+          domainSettings.addRuleset(currentRuleset)
+          
           resolve(domainSettings)
         }, error => {
           console.log('└ '+'no robots.txt'.red)
