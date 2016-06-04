@@ -161,7 +161,7 @@ const WWWEB = (() => {
           domainSettings.addRuleset(currentRuleset)
           
           if (argv.verbose && currentRuleset === null) {
-            console.log('robots.txt did not specify any rules')
+            console.log('[warning] robots.txt did not specify any rules'.yellow)
           }
           
           resolve(domainSettings)
@@ -182,7 +182,7 @@ const WWWEB = (() => {
       }, self.restTime * 1000)
       
       if (argv.verbose && self.restTime > 0) {
-        console.log(`resting for ${self.restTime}s...`)
+        console.log(`[info] resting for ${self.restTime}s...`)
       }
     } else {
       // terminate
