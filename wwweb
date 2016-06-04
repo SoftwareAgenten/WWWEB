@@ -162,7 +162,7 @@ const WWWEB = (() => {
           
           // Parse robots.txt, Line by Line
           lines.forEach(line => {
-            if (/^User-agent:/.test(line)) {
+            if (/^User-agent:/i.test(line)) {
               const UA = GRAP_UA_REGEX.exec(line)[1]
                             
               if (currentRuleset !== null) {
