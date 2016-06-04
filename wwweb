@@ -118,7 +118,6 @@ const WWWEB = (() => {
           .forEach(x => self.domainStack.push(x)) // add new domains to stack
       }, error => {
         console.log('├ '+'no startpage'.red)
-        // TODO: handle no new domains
       }).then(() => {
         axios.get(`http://${domain}/robots.txt`).then(response => {
           console.log('└ '+'found robots.txt'.green)
