@@ -259,7 +259,11 @@ const WWWEB = (() => {
       self.processedDomains.push(domain)
       
       crawl()
-    }).catch(crawl)
+    }).catch(() => {
+      // store domain regardless
+      self.processedDomains.push(domain)
+      crawl()
+    })
   }
   
   self.run = () => {
