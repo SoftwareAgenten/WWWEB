@@ -38,11 +38,15 @@ const argv = yargs
   .count('verbose')
   .alias('verbose', 'v')
   .describe('v', 'Verbose output of what is going on')
+  // --no-color
+  .boolean('no-color')
+  .default('rest', false)
+  .describe('no-color', 'Disable colorful output')
   // --help
   .help('help')
   .alias('help', 'h')
   // examples
-  .example('$0 -d example.org --rest 1', 'start crawling at example.org with 1 second rest between requests')
+  .example('$0 -d example.org -o .', 'start crawling at example.org and output files to current directory')
   .argv
 
 // Utility
