@@ -230,8 +230,11 @@ const WWWEB = (() => {
   const crawl = () => {
     debug(`domainStack height: ${self.domainStack.length}`)
     
+    self.domainStack = self.domainStack
+      .filter(x => self.processedDomains.indexOf(x) === -1)
+    
     if (self.domainStack.length > 0) {
-      // rest
+      // rest for some time
       setTimeout(function () {
         performRoutine(self.domainStack.pop())
       }, self.restTime * 1000)
