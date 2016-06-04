@@ -34,7 +34,7 @@ const argv = yargs
 // Classes
 
 class RuleSet {
-  constructor(userAgent, rules) {
+  constructor(userAgent, rules = false) {
     this.userAgent = userAgent
     this.rules = rules
   }
@@ -90,7 +90,7 @@ const WWWEB = (() => {
     processedDomains: []
   }
   
-  self.init = (initialAddress, restTime) => {
+  self.init = (initialAddress, restTime = 0) => {
     self.initialAddress = initialAddress
     self.restTime = restTime
     self.report = new Report(initialAddress)
@@ -168,7 +168,7 @@ const WWWEB = (() => {
   }
   
   return self
-}())
+})()
 
 // Startup Logic
 
