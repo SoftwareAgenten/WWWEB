@@ -42,7 +42,7 @@ const argv = yargs
   .help('help')
   .alias('help', 'h')
   // examples
-  .example('$0 -d example.org --rest 1', 'start crawling at example.org with 1 second rest between requests')
+  .example('$0 -d example.org -o .', 'start crawling at example.org and output files to current directory')
   .argv
 
 // Utility
