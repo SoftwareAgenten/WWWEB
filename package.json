@@ -1,7 +1,7 @@
 {
   "name": "wwweb",
   "version": "0.1.0",
-  "description": "A node.js based autonomous analyzer for robots.txt files.",
+  "description": "An autonomous webcrawler for indexing robots.txt files.",
   "main": "wwweb.js",
   "repository": {
     "type": "git",
