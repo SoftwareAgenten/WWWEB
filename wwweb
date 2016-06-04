@@ -90,7 +90,7 @@ class DomainSettings {
 
 class Record {
   constructor(timestamp, domainSettings) {
-    this.timestamp
+    this.timestamp = timestamp
     this.domainSettings = domainSettings
   }
 }
