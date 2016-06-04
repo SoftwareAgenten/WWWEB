@@ -10,7 +10,7 @@ const colors = require('colors')
 // Modules Setup
 
 const argv = yargs
-  .usage('usage: $0 -d <domain> [--rest <seconds>] [-v]')
+  .usage('usage: $0 -d <domain> [--rest <seconds>] [[-v] -v] [-t <ms>]')
   // --domain
   .demand('d')
   .alias('d', 'domain')
@@ -20,6 +20,10 @@ const argv = yargs
   .default('rest', 0)
   .alias('rest', 'r')
   .describe('r', 'Seconds to rest between requests')
+  // --timeout
+  .default('timeout', 15 * 1000)
+  .alias('timeout', 't')
+  .describe('t', 'Milliseconds before a request times out')
   // --verbose
   .count('verbose')
   .alias('verbose', 'v')
@@ -45,6 +49,10 @@ const warn = message => {
     console.log(`[warning] ${message}`.yellow)
   }
 }
+
+// User Config
+
+axios.defaults.timeout = argv.timeout
 
 // Classes
 
@@ -142,7 +150,11 @@ const WWWEB = (() => {
         
         debug(`added ${newDomains.length} new domains to the stack`)
       }, error => {
-        console.log('├ '+'no startpage'.red)
+        if (error.code === 'ECONNABORTED') {
+          console.log('├ '+'connection timeout for startpage'.red)
+        } else {
+          console.log('├ '+'no startpage'.red)
+        }
       }).then(() => {
         axios.get(`http://${domain}/robots.txt`).then(response => {
           // Check Content-Type
@@ -193,8 +205,11 @@ const WWWEB = (() => {
           resolve(domainSettings)
           debug('resolved domain settings')
         }, error => {
-          console.log('└ '+'no robots.txt'.red)
-          // TODO: handle no robots.txt
+          if (error.code === 'ECONNABORTED') {
+            console.log('└ '+'connection timeout for robots.txt'.red)
+          } else {
+            console.log('└ '+'no robots.txt'.red)
+          }
           reject()
         })
       })
