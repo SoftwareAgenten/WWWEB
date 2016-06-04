@@ -9,14 +9,13 @@ An autonomous webcrawler for indexing robots.txt files.
 ## Usage
 
 ```sh
-wwweb -d <domain> [-s <interval>] -o <directory> [--rest <seconds>] [[-v]
--v] [-t <timeout>]
+wwweb -d <domain> [-s <interval>] -o <directory> [--rest <seconds>] [[-v] -v] [-t <timeout>]
 ```
 
 ## Options
 
 | Flag | Alias | Description | Info |
-|:-|:-|:-|:-|
+|:--|:--|:--|:--|
 | `--domain` | `-d` | Initial domain | required |
 | `--save-interval` | `-s` | Interval in seconds for outputting reports | default: 30 |
 | `--output` | `-o` | Name of the output directory | required |
