@@ -38,6 +38,10 @@ const argv = yargs
   .count('verbose')
   .alias('verbose', 'v')
   .describe('v', 'Verbose output of what is going on')
+  // --no-color
+  .boolean('no-color')
+  .default('rest', false)
+  .describe('no-color', 'Disable colorful output')
   // --help
   .help('help')
   .alias('help', 'h')
