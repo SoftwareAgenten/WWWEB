@@ -279,7 +279,7 @@ const WWWEB = (() => {
           return
         }
         
-        debug(`report ${filename} was saved`)
+        console.log('[report saved]'.grey)
       })
     }, argv.saveInterval * 1000)
   }
