@@ -38,6 +38,10 @@ class RuleSet {
     this.userAgent = userAgent
     this.rules = rules
   }
+  
+  addRule(rule) {
+    this.rules.push(rule)
+  }
 }
 
 class DomainSettings {
