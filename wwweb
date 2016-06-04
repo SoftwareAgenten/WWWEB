@@ -158,8 +158,6 @@ const WWWEB = (() => {
           const lines = response.data.split('\n')
           let currentRuleset = null
           
-          debug(`got ${lines.length} lines`)
-          
           // Parse robots.txt, Line by Line
           lines.forEach(line => {
             if (/^User-agent:/i.test(line)) {
