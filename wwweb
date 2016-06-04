@@ -40,6 +40,11 @@ const debug = message => {
     console.log(`[debug] ${message}`.grey)
   }
 }
+const warn = message => {
+  if (VERBOSE_LEVEL >= 1) {
+    console.log(`[warning] ${message}`.yellow)
+  }
+}
 
 // Classes
 
@@ -110,6 +115,8 @@ const WWWEB = (() => {
     self.initialAddress = initialAddress
     self.restTime = restTime
     self.report = new Report(initialAddress)
+    
+    debug(`init with restTime: ${restTime}`)
   }
   
   const processDomain = domain => {
@@ -132,6 +139,8 @@ const WWWEB = (() => {
           .filter(x => x !== domain) // filter out current domain
           .filter(x => self.processedDomains.indexOf(x) === -1) // keep unknown
           .forEach(x => self.domainStack.push(x)) // add new domains to stack
+        
+        debug(`added ${newDomains.length} new domains to the stack`)
       }, error => {
         console.log('├ '+'no startpage'.red)
       }).then(() => {
@@ -149,6 +158,8 @@ const WWWEB = (() => {
           const lines = response.data.split('\n')
           let currentRuleset = null
           
+          debug(`got ${lines.length} lines`)
+          
           // Parse robots.txt, Line by Line
           lines.forEach(line => {
             if (/^User-agent:/.test(line)) {
@@ -161,20 +172,28 @@ const WWWEB = (() => {
               currentRuleset = new RuleSet(UA)
             }
             
-            else if (/^Disallow:/.test(line)) {
+            else if (/^Disallow:/i.test(line)) {
+              if (currentRuleset === null) {
+                warn('rule without user-agent was found and ignored')
+                return
+              }
+              
               const rule = GRAP_RULE_REGEX.exec(line)[1]
               currentRuleset.addRule(rule)
             }
           })
           
+          debug(`did parse robots.txt of ${domain}`)
+          
           // Add last Ruleset to DomainSettings
           domainSettings.addRuleset(currentRuleset)
           
-          if (argv.verbose && currentRuleset === null) {
-            console.log('[warning] robots.txt did not specify any rules'.yellow)
+          if (currentRuleset === null) {
+            warn('robots.txt did not specify any rules')
           }
           
           resolve(domainSettings)
+          debug('resolved domain settings')
         }, error => {
           console.log('└ '+'no robots.txt'.red)
           // TODO: handle no robots.txt
@@ -185,7 +204,7 @@ const WWWEB = (() => {
   }
   
   const crawl = () => {
-    debug(`DomainStack Height: ${self.domainStack.length}`)
+    debug(`domainStack height: ${self.domainStack.length}`)
     
     if (self.domainStack.length > 0) {
       // rest
@@ -218,6 +237,7 @@ const WWWEB = (() => {
   
   self.run = () => {
     performRoutine(self.initialAddress)
+    debug(`started running`)
   }
   
   return self
