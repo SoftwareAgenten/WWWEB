@@ -21,7 +21,7 @@ const argv = yargs
   .alias('rest', 'r')
   .describe('r', 'Seconds to rest between requests')
   // --verbose
-  .boolean('verbose')
+  .count('verbose')
   .alias('verbose', 'v')
   .describe('v', 'Verbose output of what is going on')
   // --help
@@ -30,6 +30,16 @@ const argv = yargs
   // examples
   .example('$0 -d example.org --rest=1', 'start crawling at example.org with 1 second rest between requests')
   .argv
+
+// Utility
+
+const VERBOSE_LEVEL = argv.verbose
+
+const debug = message => {
+  if (VERBOSE_LEVEL >= 2) {
+    console.log(`[debug] ${message}`.grey)
+  }
+}
 
 // Classes
 
@@ -175,6 +185,8 @@ const WWWEB = (() => {
   }
   
   const crawl = () => {
+    debug(`DomainStack Height: ${self.domainStack.length}`)
+    
     if (self.domainStack.length > 0) {
       // rest
       setTimeout(function () {
