@@ -1,13 +1,15 @@
 {
   "name": "wwweb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An autonomous webcrawler for indexing robots.txt files.",
-  "main": "wwweb.js",
+  "bin": {
+    "wwweb": "./bin/wwweb.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/SoftwareAgenten/WWWEB.git"
   },
-  "author": "Florian Pircher <git@leuchtschirm.com>",
+  "author": "Florian Pircher <git@leuchtschirm.com> (https://addpixel.net)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SoftwareAgenten/WWWEB/issues"
@@ -18,5 +20,12 @@
     "colors": "^1.1.2",
     "yargs": "^4.7.1"
   },
+  "keywords": [
+    "software-agent",
+    "autonomous",
+    "bot",
+    "webcrawler",
+    "robots"
+  ],
   "preferGlobal": true
 }
