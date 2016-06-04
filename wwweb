@@ -160,6 +160,10 @@ const WWWEB = (() => {
           // Add last Ruleset to DomainSettings
           domainSettings.addRuleset(currentRuleset)
           
+          if (argv.verbose && currentRuleset === null) {
+            console.log('robots.txt did not specify any rules')
+          }
+          
           resolve(domainSettings)
         }, error => {
           console.log('└ '+'no robots.txt'.red)
