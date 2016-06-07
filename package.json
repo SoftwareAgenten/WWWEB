@@ -1,6 +1,6 @@
 {
   "name": "wwweb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An autonomous webcrawler for indexing robots.txt files.",
   "bin": {
     "wwweb": "./wwweb.js"
