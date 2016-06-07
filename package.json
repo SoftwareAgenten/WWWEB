@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "An autonomous webcrawler for indexing robots.txt files.",
   "bin": {
-    "wwweb": "./bin/wwweb.js"
+    "wwweb": "./wwweb.js"
   },
   "repository": {
     "type": "git",
