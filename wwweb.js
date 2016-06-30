@@ -174,7 +174,7 @@ const WWWEB = (() => {
         axios.get(`http://${domain}/robots.txt`).then(response => {
           // Check Content-Type
           if (!/text\/plain/i.test(response.headers['content-type'])) {
-            console.log('└ '+'invalide robots.txt'.red)
+            console.log('└ '+'invalid robots.txt'.red)
             reject()
             return
           }
