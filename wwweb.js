@@ -11,7 +11,7 @@ const colors = require('colors')
 // Modules Setup
 
 const argv = yargs
-  .usage('usage: $0 -d <domain> [-s <interval>] -o <directory> [--rest <seconds>] [[-v] -v] [-t <timeout>]')
+  .usage('usage: $0 -d <domain> [-s <interval>] -o <directory> [--rest <seconds>] [-v [-v]] [-t <timeout>]')
   // --domain
   .demand('d')
   .alias('d', 'domain')
